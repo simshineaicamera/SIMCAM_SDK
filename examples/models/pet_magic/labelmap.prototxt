@@ -1,0 +1,55 @@
+item {
+  name: "none_of_the_above"
+  label: 0
+  display_name: "background"
+}
+item {
+  name: "cat_yawning"
+  label: 1
+  display_name: "cat_yawning"
+}
+item {
+  name: "cat_sitting_down"
+  label: 2
+  display_name: "cat_sitting_down"
+}
+item {
+  name: "cat_standing_up"
+  label: 3
+  display_name: "cat_standing_up"
+}
+item {
+  name: "dog_rolling"
+  label: 4
+  display_name: "dog_rolling"
+}
+item {
+  name: "dog_sitting_down"
+  label: 5
+  display_name: "dog_sitting_down"
+}
+item {
+  name: "dog_standing_up"
+  label: 6
+  display_name: "dog_standing_up"
+}
+item {
+  name: "dog_shaking_hand"
+  label: 7
+  display_name: "dog_shaking_hand"
+}
+item {
+  name: "cat_shaking_hand"
+  label: 8
+  display_name: "cat_shaking_hand"
+}
+item {
+  name: "dog"
+  label: 9
+  display_name: "dog"
+}
+item {
+  name: "cat"
+  label: 10
+  display_name: "cat"
+}

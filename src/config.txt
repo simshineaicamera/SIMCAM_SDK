@@ -1,0 +1,41 @@
+{
+"model":[{
+    "model_have":1,
+    "input_width":300,
+    "input_height":300,
+    "shave_num":6,
+    "input_color":1,
+    "mean0":127.5,
+    "mean1":127.5,
+    "mean2":127.5,
+    "std":127.5,
+    "label":15,
+    "conf_thresh":0.5
+},
+{
+    "model_have":0,
+    "input_width":64,
+    "input_height":64,
+    "shave_num":1,
+    "input_color":0,
+    "mean0":127.5,
+    "mean1":127.5,
+    "mean2":127.5,
+    "std":127.5,
+    "label":0,
+    "conf_thresh":0.5
+},
+{
+    "model_have":0,
+    "input_width":300,
+    "input_height":300,
+    "shave_num":2,
+    "input_color":0,
+    "mean0":127.5,
+    "mean1":127.5,
+    "mean2":127.5,
+    "std":127.5,
+    "label":15,
+    "conf_thresh":0.5
+}]
+}

@@ -1,0 +1,9 @@
+Funny pet detection model
+mAP=0.740245
+input_size: 320x320
+number of classes: 11
+scale 1
+mean [104,117,124]
+
+
+

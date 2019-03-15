@@ -1,0 +1,108 @@
+#!/bin/bash
+
+TOP_DIR=/opt/hisi-linux/x86-arm
+TOOL_DIR=$TOP_DIR/arm-hisiv300-linux
+TAR_BIN_DIR=$TOOL_DIR/target/bin
+BIN_FILES=$TOOL_DIR/bin/arm-hisiv300-linux-uclibcgnueabi-*
+LN_FILE_NAME=arm-hisiv300-linux-
+TOOLS_PKG="`dirname $0`/arm-hisiv300-linux.tar.bz2"
+
+set +e
+
+if [ -z "$1" ] 
+then
+	echo "CROSS_COMPILER_PATH=$TAR_BIN_DIR"
+	if [ -f $TOOL_DIR/version ]
+	then
+		if [ -n "`grep 110310 $TOOL_DIR/version`" ]
+		then
+			echo "Cross Tools has been installed yet!" >&2
+			exit 0
+		fi
+	else
+		echo "Do not have version file" >&2
+	fi
+
+	eval $0 force
+	[ $? == 0 ] && exit 0
+
+	echo "sorry, you must have super privilege!" >&2
+	select choose in 'I have root passwd' 'I have sudo privilege' 'Try again' 'Ignore' 'Aboart' 
+	do
+		case $choose in
+		*root*)
+			su -c "$0 force"
+			[ $? == 0 ] && break
+			;;
+		*sudo*)
+			sudo $0 force
+			[ $? == 0 ] && break
+			;;
+		Try*)
+			eval $0 force
+			[ $? == 0 ] && break
+			;;
+		Ignore)
+			exit 0
+			;;
+		Aboart)
+			exit 1
+			;;
+		*)
+			echo "Invalid select, please try again!" >&2
+			continue
+			;;
+		esac
+
+		echo "Install cross tools failed!" >&2
+	done
+
+	exit 0
+fi
+
+mkdir -pv $TOP_DIR
+[ $? != 0 ] && exit 1
+
+if [ -d $TOOL_DIR ]
+then
+	echo "Delete exist directory..." >&2
+	rm $TOOL_DIR -rf 
+else
+	mkdir -pv $TOOL_DIR
+fi
+
+echo "Extract cross tools ..." >&2
+tar -xjf $TOOLS_PKG -C $TOP_DIR
+[ $? != 0 ] && exit 1
+
+
+# creat link
+rm $TAR_BIN_DIR -rf
+mkdir -p $TAR_BIN_DIR
+for armlinux in $BIN_FILES
+do
+       ln $armlinux $TAR_BIN_DIR/$LN_FILE_NAME`basename $armlinux | cut -b 34-` -sv
+done
+
+sed -i  '/\/arm-hisiv300-linux\//d' /etc/profile
+[ $? != 0 ] && exit 1
+
+if [ -z "`grep "$TAR_BIN_DIR" < /etc/profile`" ] ;
+then
+	echo "export path $TAR_BIN_DIR" >&2
+	cat >> /etc/profile << EOF
+
+# `date`
+# Hisilicon Linux, Cross-Toolchain PATH
+export PATH="$TAR_BIN_DIR:\$PATH" 
+# 
+
+EOF
+	[ $? != 0 ] && exit 1
+else
+	echo "skip export toolchains path" >&2
+fi
+
+exit 0
+
+
