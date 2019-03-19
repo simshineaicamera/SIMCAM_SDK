@@ -2,7 +2,7 @@
 
 The first on-device AI Security Camera for smart home.
 
-![camera pic](img/simcam4.jpg "SimCam AI Camera")
+![camera pic](img/simcam.jpg "SimCam AI Camera")
 
 
 The SimCam uses AI for facial recognition, pet monitoring, and more via location training. The SimCam has a 5 megapixel image sensor with night vision for still images and 1080 HD videos. The IP65 waterproof rated indoor/outdoor, camera can rotate 360 degrees while tracking objects.
@@ -14,7 +14,7 @@ The work flow of SimCam in developer mode is shown in the following figure.
 ![work flow](img/simcam3.jpg "Work Flow of Camera")
 
 
-As shown in the figure, SIMcam consists of two embedded boards, one is HI3516
+As shown in the figure, SimCam consists of two embedded boards, one is HI3516
 and another is Movidius. HI3516 is used for video capture and video play. Movidius is
 used for deep learning computing. Two embedded boards communicate by SPI.
 There are some documents for developers inside [docs](./docs/) folder including :
