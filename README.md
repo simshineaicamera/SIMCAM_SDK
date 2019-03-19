@@ -18,10 +18,9 @@ As shown in the figure, SimCam consists of two embedded boards, one is HI3516
 and another is Movidius. HI3516 is used for video capture and video play. Movidius is
 used for deep learning computing. Two embedded boards communicate by SPI.
 There are some documents for developers inside [docs](./docs/) folder including :
-
-   * [Quick start guide of SimCam in developer mode](./docs/Quick Start guide of SimCam in Developer Mode.pdf);
-   * [Toolchain installation and usage guide](./docs/Guide of Tool Chain Installation and Use.pdf);
-   * [SimCam API guide](./docs/Guide of SIMcam SDK APIs.pdf);
+   * [Quick start guide of SimCam in developer mode](docs/Quick Start guide of SimCam in Developer Mode.pdf);
+   * [Toolchain installation and usage guide](docs/Guide of Tool Chain Installation and Use.pdf);
+   * [SimCam API guide](docs/Guide of SIMcam SDK APIs.pdf);
 
 
 Developers can train their own object detection models using Caffe deep learning framework and  neural network architecture provided by SimCam team. Instruction can be found in [this document](./docs/Train_Model.pdf)
