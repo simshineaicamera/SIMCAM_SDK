@@ -1,8 +1,9 @@
-# [SimCam](simcam.ai) AI Camera.
- <p style="text-align: justify">
+# [SimCam](https://simcam.ai/) AI Camera.
+
 The first on-device AI Security Camera for smart home.
-</p>
+
 ![camera pic](img/simcam4.jpg "SimCam AI Camera")
+
  <p style="text-align: justify">
  <br>
 The SimCam uses AI for facial recognition, pet monitoring, and more via location training. The SimCam has a 5 megapixel image sensor with night vision for still images and 1080 HD videos. The IP65 waterproof rated indoor/outdoor, camera can rotate 360 degrees while tracking objects.
