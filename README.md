@@ -22,6 +22,7 @@ There are some documents for developers inside [docs](./docs/) folder including 
    * [Quick start guide of SimCam in developer mode](docs/Quick_Start_Guide.pdf);
    * [Toolchain installation and usage guide](docs/Guide_of_Tool_Chain_Installation_and_usage.pdf);
    * [SimCam API guide](docs/Guide_of_SimCam_SDK_APIs.pdf);
+   * [How to train object detection model](docs/How_To_Train_Model.pdf)
 
 
 Developers can train their own object detection models using Caffe deep learning framework and  neural network architecture provided by SimCam team. Instruction can be found in [this document](./docs/Train_Model.pdf)
