@@ -4,29 +4,10 @@ item {
   display_name: "background"
 }
 item {
-  name: "person"
+  name: "cat"
   label: 1
-  display_name: "person"
+  display_name: "cat"
 }
-item {
-  name: "car"
-  label: 2
-  display_name: "car"
-}
-item {
-  name: "building"
-  label: 3
-  display_name: "building"
-}
-item {
-  name: "tree"
-  label: 4
-  display_name: "tree"
-}
-item {
-  name: "roof"
-  label: 5
-  display_name: "roof"
-}
+
 
 
