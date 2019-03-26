@@ -9,14 +9,14 @@ item {
   display_name: "person"
 }
 item {
-  name: "building"
+  name: "car"
   label: 2
-  display_name: "building"
+  display_name: "car"
 }
 item {
-  name: "car"
+  name: "building"
   label: 3
-  display_name: "car"
+  display_name: "building"
 }
 item {
   name: "tree"
@@ -28,4 +28,5 @@ item {
   label: 5
   display_name: "roof"
 }
+
 

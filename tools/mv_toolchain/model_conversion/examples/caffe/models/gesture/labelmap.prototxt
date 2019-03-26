@@ -1,0 +1,20 @@
+item {
+  name: "none_of_the_above"
+  label: 0
+  display_name: "background"
+}
+item {
+  name: "fist"
+  label: 1
+  display_name: "fist"
+}
+item {
+  name: "five"
+  label: 2
+  display_name: "five"
+}
+item {
+  name: "neg"
+  label: 3
+  display_name: "neg"
+}
