@@ -26,11 +26,16 @@ There are some documents for developers inside [docs](./docs/) folder including 
 
 
 Developers can train their own object detection models using Caffe deep learning framework and  neural network architecture provided by SimCam team. Instruction can be found in [this document](./docs/How_To_Train_Model.pdf).
-However, SIMACAM team has provided several robust detection models, such as [baby climb](examples/models/babyclimb) detection model, [gesture](examples/models/gesture) detection model, [person car face](examples/models/person_car_face) detection model, [pet magic](examples/models/pet_magic) detection models.  Here is some examples of detection results for each model:
+However, SIMACAM team has provided several robust detection models, such as [baby climb](examples/models/babyclimb) detection model, [gesture](examples/models/gesture) detection model, [person car face](examples/models/person_car_face) detection model, [pet magic](examples/models/pet_magic) detection models.  Here is some interesting results of detection for some models:
 <br>
 Pet magic detection model:
 
-![work flow](https://github.com/RamatovInomjon/mygifs/blob/master/petmagicgif.gif "Pet magic test")
+![pet magic](https://github.com/RamatovInomjon/mygifs/blob/master/petmagicgif.gif "Pet magic test")
+
+<br>
+Baby climb detection model:
+
+![baby climb](https://github.com/RamatovInomjon/mygifs/blob/master/babyclimb.gif "baby climb test")
 
 ### Support
 If you need any help, please post us an issue on [Github Issues](https://github.com/simshineaicamera/SIMCAM_SDK/issues).  You are welcome to contact us for your suggestions!
