@@ -6,8 +6,7 @@ if ! test -f prototxts/train.prototxt ;then
 fi
 mkdir -p snapshot
 /opt/movidius/ssd-caffe/build/tools/caffe train -solver="solver_train.prototxt" \
-#-snapshot="simcam_iter_10000.solvrate" 
-#-weights="simcam_iter_10000.caffemodel" \
 #-gpu 0
+
 
 
