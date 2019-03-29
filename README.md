@@ -13,9 +13,9 @@ The work flow of SimCam in developer mode is shown in the following figure.
 
 ![work flow](img/simcam3.jpg "Work Flow of Camera")
 
-<div style="text-align: justify">
+
 As shown in the figure, SimCam consists of two embedded boards, one is HI3516 and another is Movidius. HI3516 is used for video capture and video play. Movidius is used for deep learning computing. Two embedded boards communicate by spi.
-</div>
+
 There are some documents for developers inside [docs](./docs/) folder including :
 
    * [Quick start guide of SimCam in developer mode](docs/Quick_Start_Guide.pdf);
