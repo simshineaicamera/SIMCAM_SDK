@@ -62,10 +62,13 @@ int readConfig(CNN_Config_t* config){
 void cmdHandler(){
     //create a structure to copy the value from gCmd at this moment
     cmd_t _ptr;
+    memset(&_ptr, 0, sizeof(cmd_t));
     memcpy(&_ptr, &gCmd, sizeof(cmd_t));
-
+   
     //the first value of data[1024] is the number of recognition boxes
     int num_box =  _ptr.data[0];
+
+
     //if the number of boxes is not in range of 0~4, there may be a mistake.
     if(num_box<0 || num_box>4) return;
 
@@ -108,16 +111,37 @@ void cmdHandler(){
         int classID = _ptr.data[(i + 1) * 7 + 1];
 
         //print message of the result,including class ID and coordinates of recognition box.
-        printf("class: %d, x1: %f, y1: %f, x2: %f, y2: %f\n",classID,_ptr.data[10],_ptr.data[11],_ptr.data[12],_ptr.data[13]);
+        printf("DetectionModelResult: class: %d, x1: %f, y1: %f, x2: %f, y2: %f\n",classID,_ptr.data[10],_ptr.data[11],_ptr.data[12],_ptr.data[13]);
 
         //the ID number is 12, which means that the object is identified as a dog.
-        if(12 == classID){
-            sprintf(localdata.path_audio,"dog");     //play a audio to remind you it's a dog. "dog.pcm" should be in folder /mnt/DCIM/voice.
-        }
-
+        // if(12 == classID){
+        //     sprintf(localdata.path_audio,"dog");     //play a audio to remind you it's a dog. "dog.pcm" should be in folder /mnt/DCIM/voice.
+        // }
+   
         //copy all the value of localdata to the shared memory.
         memcpy(viraddr,&localdata,sizeof(stMemory));
+  //  }
     }
+     // Print classification result ----->>>>>
+    if(gCNNparam.cnn[1].model_have){
+        float res1=_ptr.data[700+7];
+        float res2=_ptr.data[700+8];
+        if(res1>=1.0||res1<=0)return;
+        if(res2>=1.0||res2<=0)return;
+        printf("FirstClassificationModelResult, class0: %f\n", res1);
+        printf("FirstClassificationModelResult, class1: %f\n", res2);
+        }
+    // Print classification result ----->>>>>
+    if(gCNNparam.cnn[2].model_have){
+        float res1=_ptr.data[760+7];
+        float res2=_ptr.data[760+8];
+        if(res1>=1.0||res1<=0)return;
+        if(res2>=1.0||res2<=0)return;
+        printf("SecondClassificationModelResult, class0: %f\n", res1);
+        printf("SecondClassificationModelResult, class1: %f\n", res2);
+        }
+    
+   
 }
 
 //create a thread to read data from SPI 
@@ -125,7 +149,7 @@ void* threadSpi(void *arg){
 	int Cnt = 0;
     while (1) {
 	    if(Cnt++%30==0){
-            printf("Spi loop>>>>>>>>>>>>>>>>>>>>>>>>\n");
+            printf("No detection, spi loop>>>>>>>>>>>>>>>>>>>>>>>>\n");
             memset(viraddr,0,sizeof(stMemory));
         }
         //readCmd() will get all data from SPI and verify the validity of the data,only valid data will be further processed in cmdHandler().
@@ -147,7 +171,7 @@ void startSpiServer(){
 void rebootAlg(CNN_Config_t* param){
 
 //send the server process program of Movidius through SPI.
-        sendApp("Detect_Server_Process");
+        //sendApp("Detect_Server_Process");
 //after sent the server process program,enable SPI.
         openSpi();
 //call the function of readConfig to read parameters from config.txt.
@@ -155,7 +179,14 @@ void rebootAlg(CNN_Config_t* param){
 //after read the parameters,send them to Movidius through SPI.
         sendCfg((uint8_t*)param,sizeof(CNN_Config_t));
 //send the model file to Movidius through SPI.
-        sendBlob("Detect_Graph");
+        sendBlob("person_face"); // detection model
+        if(gCNNparam.cnn[1].model_have){
+            sendBlob("gender");  // gender classification model
+        }
+         if(gCNNparam.cnn[2].model_have){
+            sendBlob("emotion"); // emotion classification model
+        }
+        
 }
 
 int main(int argc, char *argv[])
@@ -164,7 +195,6 @@ int main(int argc, char *argv[])
     initSystem();
 //reset Movidius.
     reset2450();
-
     rebootAlg(&gCNNparam);
     
     startSpiServer();
