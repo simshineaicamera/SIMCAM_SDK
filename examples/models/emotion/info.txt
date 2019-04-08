@@ -1,0 +1,7 @@
+Emotion classification model
+
+mean = {127.5,127.5,127.5}
+std = {127.5}
+input_color = 0
+shave_num 1
+input_width/height 64
