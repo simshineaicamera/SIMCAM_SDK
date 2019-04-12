@@ -124,8 +124,8 @@ void cmdHandler(){
     }
      // Print classification result ----->>>>>
     if(gCNNparam.cnn[1].model_have){
-        float res1=_ptr.data[700+7];
-        float res2=_ptr.data[700+8];
+        float res1=_ptr.data[70+7];
+        float res2=_ptr.data[70+8];
         if(res1>=1.0||res1<=0)return;
         if(res2>=1.0||res2<=0)return;
         printf("FirstClassificationModelResult, class0: %f\n", res1);
@@ -133,8 +133,8 @@ void cmdHandler(){
         }
     // Print classification result ----->>>>>
     if(gCNNparam.cnn[2].model_have){
-        float res1=_ptr.data[760+7];
-        float res2=_ptr.data[760+8];
+        float res1=_ptr.data[326+7];
+        float res2=_ptr.data[326+8];
         if(res1>=1.0||res1<=0)return;
         if(res2>=1.0||res2<=0)return;
         printf("SecondClassificationModelResult, class0: %f\n", res1);
@@ -171,7 +171,7 @@ void startSpiServer(){
 void rebootAlg(CNN_Config_t* param){
 
 //send the server process program of Movidius through SPI.
-        //sendApp("Detect_Server_Process");
+        sendApp("Detect_Server_Process");
 //after sent the server process program,enable SPI.
         openSpi();
 //call the function of readConfig to read parameters from config.txt.

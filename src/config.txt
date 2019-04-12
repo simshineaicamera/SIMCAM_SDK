@@ -38,4 +38,5 @@
     "label":3,
     "conf_thresh":0.5
 }]
+"wifi_mode":"AP_MODE""STA_MODE"
 }
