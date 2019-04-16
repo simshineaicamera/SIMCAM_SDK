@@ -39,4 +39,4 @@ Baby climb detection model:
 ![baby climb](https://github.com/RamatovInomjon/mygifs/blob/master/babyclimb.gif "baby climb test")
 
 ### Support
-If you need any help, please post us an issue on [Github Issues](https://github.com/simshineaicamera/SIMCAM_SDK/issues).  You are welcome to contact us for your suggestions!
+If you need any help, please post us an issue on [Github Issues](https://github.com/simshineaicamera/SIMCAM_SDK/issues) or send us an email [sdk@simcam.ai](mailto:sdk@simcam.ai).  You are welcome to contact us for your suggestions!

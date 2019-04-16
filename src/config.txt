@@ -37,6 +37,9 @@
     "std":127.5,
     "label":3,
     "conf_thresh":0.5
-}]
-"wifi_mode":"AP_MODE""STA_MODE"
+}],
+"wifi_mode":"AP_MODE",
+"if_send":"0",
+"server_IP":"118.190.201.26",
+"port":"8001"
 }

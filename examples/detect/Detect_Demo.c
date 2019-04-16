@@ -16,12 +16,14 @@ stMemory* viraddr;
 
 //A variable containing preprocess parameters of Detect_Graph, stores values from config.txt
 static CNN_Config_t gCNNparam;
-
+static Server_Info server_info;
+int classID;
+RectEx_t Rect;
 //color of recognition box.
 YUVColor_t YUVColor_Orange={173,186,30};
 
 // A function reads values from config.txt and stores them in a structure.
-int readConfig(CNN_Config_t* config){
+int readConfig(CNN_Config_t* config, Server_Info* info){
 
     //open the file of config.txt in SD-Card.
     FILE* fd = fopen("/mnt/DCIM/config.txt", "r");
@@ -29,7 +31,7 @@ int readConfig(CNN_Config_t* config){
         printf("open /mnt/DCIM/config.txt err\n");
         return -1;
     } 
-
+   
     //Get the content of config.txt
     char tmp[4096]={0};
     fread(tmp,1,4096,fd);
@@ -55,7 +57,50 @@ int readConfig(CNN_Config_t* config){
         config->cnn[i].label = cJSON_GetObjectItem(object,"label")->valueint;
         config->cnn[i].conf_thresh = cJSON_GetObjectItem(object,"conf_thresh")->valuedouble;
     }
+    
+    info->if_send=cJSON_GetObjectItem(json, "if_send")->valueint;
+    info->server_ip=cJSON_GetObjectItem(json,"server_IP")->valuestring;
+    info->port=cJSON_GetObjectItem(json,"port")->valueint;
+
     return 0;
+}
+void socket_send(int classid,RectEx_t rectt){
+    char* server_ip =server_info.server_ip;
+    int socketfd;    
+    struct sockaddr_in sockaddr;    
+    socketfd = socket(AF_INET, SOCK_STREAM, 0);    
+    memset(&sockaddr, 0, sizeof(sockaddr));    
+    sockaddr.sin_family = AF_INET;    
+    sockaddr.sin_port = htons(server_info.port);   
+    inet_pton(AF_INET, server_ip, &sockaddr.sin_addr);    
+    if ((connect(socketfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr))) <0){            
+        printf("server connect error\n");
+        return;        
+    }
+   // printf(" connect succeed \n");
+   struct timeb timer_msec;
+    long long int timestamp_msec;
+    if(!ftime(&timer_msec)){
+        timestamp_msec=((long long int)timer_msec.time)*1000ll + (long long int)timer_msec.millitm;
+    }
+    else
+    {
+        timestamp_msec=-1;
+    }
+   
+    char miio_send[1024];
+    memset(miio_send, 0, sizeof(miio_send));
+    // 
+    sprintf(miio_send,"GET http://%s:%d/simcam/event?modeltype=%d&pointA_X=%f&pointA_Y=%f&pointB_X=%f&pointB_Y=%f&timestamp=%lld\r\nCache-Control: no-cache",
+    server_info.server_ip, server_info.port, classid,rectt.rect.x1,rectt.rect.y1,rectt.rect.x2,rectt.rect.y2,timestamp_msec);
+    //sprintf(miio_send,"GET /simcam/event?modeltype=1&amp;pointA_X=1&amp;pointA_Y=2&amp;pointB_X=3&amp;pointB_Y=4 HTTP/1.1\r\n\
+            Host: 118.190.201.26:8001\r\n\
+            Cache-Control: no-cache");
+        if ((send(socketfd, miio_send, strlen(miio_send), 0)) < 0) {
+            printf("tcp send fail to server\n");
+        }
+
+    close(socketfd);
 }
 
 // A function parses the output data of CNN network, gCmd is a globle value and the original output data
@@ -74,7 +119,7 @@ void cmdHandler(){
 
     for(int i = 0; i < num_box; i++){
         // create a structure to store the value of coordinates 
-        RectEx_t Rect;
+        
             //
             Rect.rect.x1 = _ptr.data[(i + 1) * 7 + 3];
             Rect.rect.y1 = _ptr.data[(i + 1) * 7 + 4];
@@ -108,7 +153,7 @@ void cmdHandler(){
         if(probility<con_thresh) return;
         
         //get the class ID of detected object,the corresponding category of ID can be viewed in labelmap.prototxt
-        int classID = _ptr.data[(i + 1) * 7 + 1];
+        classID = _ptr.data[(i + 1) * 7 + 1];
 
         //print message of the result,including class ID and coordinates of recognition box.
         printf("DetectionModelResult: class: %d, x1: %f, y1: %f, x2: %f, y2: %f\n",classID,_ptr.data[10],_ptr.data[11],_ptr.data[12],_ptr.data[13]);
@@ -140,7 +185,9 @@ void cmdHandler(){
         printf("SecondClassificationModelResult, class0: %f\n", res1);
         printf("SecondClassificationModelResult, class1: %f\n", res2);
         }
-    
+    if(server_info.if_send){
+      socket_send(classID, Rect);
+    }
    
 }
 
@@ -168,14 +215,27 @@ void startSpiServer(){
 }
 
 
-void rebootAlg(CNN_Config_t* param){
+void rebootAlg(CNN_Config_t* param, Server_Info* info){
 
 //send the server process program of Movidius through SPI.
         sendApp("Detect_Server_Process");
 //after sent the server process program,enable SPI.
         openSpi();
 //call the function of readConfig to read parameters from config.txt.
-        readConfig(param);
+        readConfig(param, info);
+        
+   
+    struct timeb timer_msec;
+    long long int timestamp_msec;
+    if(!ftime(&timer_msec)){
+        timestamp_msec=((long long int)timer_msec.time)*1000ll + (long long int)timer_msec.millitm;
+    }
+    else
+    {
+        timestamp_msec=-1;
+    }
+    
+    printf("if_send:%d, ip:%s, port:%d, time:%lld \n", server_info.if_send,server_info.server_ip, server_info.port, timestamp_msec);
 //after read the parameters,send them to Movidius through SPI.
         sendCfg((uint8_t*)param,sizeof(CNN_Config_t));
 //send the model file to Movidius through SPI.
@@ -188,16 +248,21 @@ void rebootAlg(CNN_Config_t* param){
         }
         
 }
-
+void set_time(){
+    system("ntpd -p us.ntp.org.cn -qNn");
+   // return 0;
+}
 int main(int argc, char *argv[])
 {
 //init the whole system,including SPI and serial port.
     initSystem();
+    set_time();
 //reset Movidius.
     reset2450();
-    rebootAlg(&gCNNparam);
-    
-    startSpiServer();
 
+    rebootAlg(&gCNNparam, &server_info);
+   
+    startSpiServer();
+    
     while(1);
 }

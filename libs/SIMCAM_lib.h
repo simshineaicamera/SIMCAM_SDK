@@ -14,6 +14,14 @@
 #include "serial_api.h"
 #include "cJSON.h"
 #include <signal.h>
+#include <netdb.h>  
+#include <net/if.h>  
+#include <arpa/inet.h>  
+#include <sys/ioctl.h>  
+#include <sys/types.h>  
+#include <sys/socket.h>
+#include <sys/timeb.h>
+#include <sys/time.h>
 
 typedef struct{
     float x1;
@@ -58,6 +66,12 @@ typedef struct{
     int NumOfModel;    
     CNN_Param_t cnn[3];
 }CNN_Config_t;
+
+typedef struct{
+    int if_send;
+    char*  server_ip;
+    int port;
+}Server_Info;
 
 extern stMemory* viraddr;
 
