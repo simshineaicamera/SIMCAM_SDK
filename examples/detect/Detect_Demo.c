@@ -91,11 +91,11 @@ void socket_send(int classid,RectEx_t rectt){
     char miio_send[1024];
     memset(miio_send, 0, sizeof(miio_send));
     // 
-    sprintf(miio_send,"GET http://%s:%d/simcam/event?modeltype=%d&pointA_X=%f&pointA_Y=%f&pointB_X=%f&pointB_Y=%f&timestamp=%lld\r\nCache-Control: no-cache",
+    sprintf(miio_send,"GET http://%s:%d/simcam/event?modeltype=%d&pointA_X=%f&pointA_Y=%f&pointB_X=%f&pointB_Y=%f&timestamp=%lld\r\n\r\nCache-Control: no-cache",
     server_info.server_ip, server_info.port, classid,rectt.rect.x1,rectt.rect.y1,rectt.rect.x2,rectt.rect.y2,timestamp_msec);
-    //sprintf(miio_send,"GET /simcam/event?modeltype=1&amp;pointA_X=1&amp;pointA_Y=2&amp;pointB_X=3&amp;pointB_Y=4 HTTP/1.1\r\n\
-            Host: 118.190.201.26:8001\r\n\
-            Cache-Control: no-cache");
+    // sprintf(miio_send,"GET /simcam/event?modeltype=1&pointA_X=1&pointA_Y=2&pointB_X=3&pointB_Y=4&timestamp=1234567890111 HTTP/1.1\r\n\
+    //         Host: 118.190.201.26:8001\r\n\
+    //         Cache-Control: no-cache");
         if ((send(socketfd, miio_send, strlen(miio_send), 0)) < 0) {
             printf("tcp send fail to server\n");
         }
