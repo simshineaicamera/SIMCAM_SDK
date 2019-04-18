@@ -1,4 +1,8 @@
 {
+"wifi_mode":"STA_MODE",
+"if_send":1,
+"server_IP":"118.190.201.26",
+"port":8001,
 "model":[{
     "model_have":1,
     "input_width":300,
@@ -13,7 +17,7 @@
     "conf_thresh":0.5
 },
 {
-    "model_have":1,
+    "model_have":0,
     "input_width":64,
     "input_height":64,
     "shave_num":1,
@@ -26,7 +30,7 @@
     "conf_thresh":0.5
 },
 {
-    "model_have":1,
+    "model_have":0,
     "input_width":64,
     "input_height":64,
     "shave_num":2,
@@ -37,9 +41,5 @@
     "std":127.5,
     "label":3,
     "conf_thresh":0.5
-}],
-"wifi_mode":"AP_MODE",
-"if_send":"0",
-"server_IP":"118.190.201.26",
-"port":"8001"
+}]
 }
