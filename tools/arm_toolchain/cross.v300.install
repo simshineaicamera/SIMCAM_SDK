@@ -5,11 +5,11 @@ TOOL_DIR=$TOP_DIR/arm-hisiv300-linux
 TAR_BIN_DIR=$TOOL_DIR/target/bin
 BIN_FILES=$TOOL_DIR/bin/arm-hisiv300-linux-uclibcgnueabi-*
 LN_FILE_NAME=arm-hisiv300-linux-
-TOOLS_PKG="`dirname $0`/arm-hisiv300-linux.tar.bz2"
+TOOLS_PKG="`dirname $0`/arm-hisiv300-linux"
 
 set +e
 
-if [ -z "$1" ] 
+if [ -z "$1" ]
 then
 	echo "CROSS_COMPILER_PATH=$TAR_BIN_DIR"
 	if [ -f $TOOL_DIR/version ]
@@ -27,7 +27,7 @@ then
 	[ $? == 0 ] && exit 0
 
 	echo "sorry, you must have super privilege!" >&2
-	select choose in 'I have root passwd' 'I have sudo privilege' 'Try again' 'Ignore' 'Aboart' 
+	select choose in 'I have root passwd' 'I have sudo privilege' 'Try again' 'Ignore' 'Aboart'
 	do
 		case $choose in
 		*root*)
@@ -66,18 +66,18 @@ mkdir -pv $TOP_DIR
 if [ -d $TOOL_DIR ]
 then
 	echo "Delete exist directory..." >&2
-	rm $TOOL_DIR -rf 
+	rm $TOOL_DIR -rf
 else
 	mkdir -pv $TOOL_DIR
 fi
 
-echo "Extract cross tools ..." >&2
-tar -xjf $TOOLS_PKG -C $TOP_DIR
+echo "Copying cross tools to the dir ..." >&2
+cp -r $TOOLS_PKG $TOP_DIR
 [ $? != 0 ] && exit 1
 
 
 # creat link
-rm $TAR_BIN_DIR -rf
+#rm $TAR_BIN_DIR -rf
 mkdir -p $TAR_BIN_DIR
 for armlinux in $BIN_FILES
 do
@@ -94,8 +94,8 @@ then
 
 # `date`
 # Hisilicon Linux, Cross-Toolchain PATH
-export PATH="$TAR_BIN_DIR:\$PATH" 
-# 
+export PATH="$TAR_BIN_DIR:\$PATH"
+#
 
 EOF
 	[ $? != 0 ] && exit 1
@@ -104,5 +104,3 @@ else
 fi
 
 exit 0
-
-
