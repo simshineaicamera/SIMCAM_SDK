@@ -25,8 +25,8 @@ There are some documents for developers inside [docs](./docs/) folder including 
 
 However, here is some guide for really really quick starters :running: Let's get started:smile:
 * [Installation](#installation)
-* [Run detection demo](#run detection demo)
-* [Face recognition demo](#face recognition demo)
+* [Run_detection_demo](#run_detection_demo)
+* [Face_recognition_demo](#face_recognition_demo)
 
 ### Installation
 
@@ -92,7 +92,7 @@ sudo ./install_opencv.sh
 Above command will install opencv 3.4.3 version on your system.
 Hurray,  we have finished installation process completely! We can move on more interesting parts.
 
-### Run detection demo
+### Run_detection_demo
 1. Prepare sd card and your SIMCAM AI camera, if you still don't have the camera , buy one from [here](https://store.simcam.ai/products/ai-camera-indoor).
 2. Copy following files into your sd card, files are located inside the `$SIMCAM_SDK\src` folder:
 ```Shell
@@ -191,7 +191,7 @@ SecondClassificationModelResult, class1: 0.508789
 If you want to see real time results with bounding boxes, you can install **VLC media player**  on your machine, and open network streams at this address: *rtsp://192.168.0.1* .
 Another option is **Kalay** app for mobile phones, both for Android and ios. But please make sure your smart phone is connected REVO_DPL wifi.
 
-### Face recognition demo
+### Face_recognition_demo
 I hope you have already successfully run our [detection demo](#run detection demo) and you have already become close friend with SIMCAM camera. Next step is to be familiar with face recognition demo.
 1. Prepare face images of people in the folder with their names, those who you want to identify by using SIMCAM camera, at least one picture for one person. Here is an example:
 ![sample](./img/sample.png)
