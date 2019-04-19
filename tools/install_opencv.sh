@@ -4,7 +4,7 @@
 
 # The source files would be downloaded to ~/opencv
 cd ~/
-mkdir opencv_dir
+mkdir opencv
 cd ~/opencv
 
 sudo apt-get -y update
@@ -31,14 +31,14 @@ sudo apt-get install -y libtbb-dev libeigen3-dev
 sudo apt-get install -y python-dev python-tk python-numpy python3-dev python3-tk python3-numpy
 
 sudo apt-get install -y unzip wget
-wget https://github.com/opencv/opencv/archive/3.4.0.zip
-unzip 3.4.0.zip
-rm 3.4.0.zip
+wget https://github.com/opencv/opencv/archive/3.4.3.zip
+unzip 3.4.3.zip
+rm 3.4.3.zip
 
-cd opencv-3.4.0
+cd opencv-3.4.3
 mkdir build
 cd build
 sudo cmake ../
-sudo make 
+sudo make
 sudo make install
 sudo ldconfig
