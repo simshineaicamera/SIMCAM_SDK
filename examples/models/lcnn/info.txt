@@ -1,0 +1,8 @@
+Classification model, outputs are feature vector, features of face.
+this model can be used with face detection model.
+
+input_size: 128X128
+scale 256
+mean [0,0,0]
+shaves 2
+input_color 0

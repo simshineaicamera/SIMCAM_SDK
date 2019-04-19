@@ -1,0 +1,8 @@
+baby climb detection model.
+
+input_size: 320x320
+number of classes: 2
+scale 1
+mean [104,117,124]
+shaves 6
+input_color 1

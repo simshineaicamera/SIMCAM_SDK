@@ -1,0 +1,7 @@
+Person car and face detection model
+
+input_size: 300x300
+number of classes: 3
+scale 127.5
+mean [127.5,127.5,127.5]
+shaves 6

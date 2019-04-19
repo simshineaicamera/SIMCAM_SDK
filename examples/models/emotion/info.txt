@@ -1,7 +1,9 @@
 Emotion classification model
 
-mean = {127.5,127.5,127.5}
-std = {127.5}
-input_color = 0
-shave_num 1
-input_width/height 64
+class 0: none
+class 1: smile
+input_size: 64X64
+scale 127.5
+mean [127.5,127.5,127.5]
+shaves 1
+input_color 0
