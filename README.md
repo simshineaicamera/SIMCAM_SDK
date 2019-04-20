@@ -46,7 +46,7 @@ SIMCAM_SDK
 ├── tools
 └── train
 ```
-Note* if you want to run only detection demo, you can skip installation process and jump to [Run detection demo](#run detection demo). However, for face recognition demo and future developments you need to install SIMCAM SDK tools.
+Note* if you want to run only detection demo, you can skip installation process and jump to [Run_detection_demo](#run_detection_demo). However, for face recognition demo and future developments you need to install SIMCAM SDK tools.
 
 #### HI3516 toolchain installation
 2. Enter `$SIMCAM_SDK/tools/arm_toolchain` folder, and execute below commands:
@@ -81,7 +81,34 @@ the version description, Congratulations!,  the toolchain installation is finish
 cd $SIMCAM_SDK/tools/mv_toolchain/model_conversion/
 sudo ./install-ncsdk.sh
 ```
-This script will install Movidius model conversion toolkit, and also caffe-ssd cpu version on your system.
+This script will install Movidius model conversion toolkit, and also caffe-ssd cpu version on your system. Execute below commands to see Movidius moldel conversion toolkit.
+
+```bash
+mvNCCompile -h
+mvNCCompile v02.00, Copyright @ Movidius Ltd 2016
+
+usage: mvNCCompile [-h] [-w WEIGHTS] [-in INPUTNODE] [-on OUTPUTNODE]
+                   [-o OUTFILE] [-s NSHAVES] [-is INPUTSIZE INPUTSIZE]
+                   network
+
+mvNCCompile.py converts Caffe or Tensorflow networks to graph files that can
+be used by the Movidius Neural Compute Platform API
+
+positional arguments:
+  network               Network file (.prototxt, .meta, .pb, .protobuf)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -w WEIGHTS            Weights file (override default same name of .protobuf)
+  -in INPUTNODE         Input node name
+  -on OUTPUTNODE        Output node name
+  -o OUTFILE            Generated graph file (default graph)
+  -s NSHAVES            Number of shaves (default 1)
+  -is INPUTSIZE INPUTSIZE
+                        Input size for networks that do not provide an input
+                        shape, width and height expected
+```
+If you can see above result, congratulations you have finished installation, it was really easy, right?!
 #### Install opencv
 Note* If you have already installed opencv>=3.4.3 versions you can skip this step.
 8. Enter `$SIMCAM_SDK/tools/` folder and run `install_opencv.sh` script :
@@ -105,6 +132,7 @@ Hurray,  we have finished installation process completely! We can move on more i
 ├── rtl_hostapd_2G.conf
 ```
 and also `$SIMCAM_SDK\examples\Detect_Demo` executable file.
+
 3. Open config.txt file to be familiar with it, it is in json format, here is written a brief introduction about config file and parameters inside it.
 ```bash
 {
@@ -154,17 +182,23 @@ and also `$SIMCAM_SDK\examples\Detect_Demo` executable file.
 }
 ```
 SIMCAM camera can run 3 deep learning models simultaneously, first one is detection model, another two are classification models.
+
 4. Insert sd card to the camera and power on it. In default config.txt, SIMCAM camera runs in AP_MODE, and creates LAN hotspot with default ssid=REVO_DPL, password=87654321, and IP = 192.168.0.1.
+
 5. Connect your PC or laptop to the REVO_DPL wifi. Open your terminal and run following commands:
 ```Shell
 telnet 192.168.0.1
 ```
+
 6. Default user login is `root` and password is blank.
+
 7. Enter `/mnt/DCIM/` folder and run Detect_Demo executable file:
+
 ```bash
 cd /mnt/DCIM/
 ./Detect_Demo
 ```
+
 8. And that's it, you are running SIMCAM camera with person and face detection,and also gender and emotion classification models.
 You can see results on the terminal like below:
 ```bash
@@ -188,11 +222,12 @@ SecondClassificationModelResult, class0: 0.051086
 SecondClassificationModelResult, class1: 0.508789
 ......
 ```
+
 If you want to see real time results with bounding boxes, you can install **VLC media player**  on your machine, and open network streams at this address: *rtsp://192.168.0.1* .
 Another option is **Kalay** app for mobile phones, both for Android and ios. But please make sure your smart phone is connected REVO_DPL wifi.
 
 ### Face_recognition_demo
-I hope you have already successfully run our [detection demo](#run detection demo) and you have already become close friend with SIMCAM camera. Next step is to be familiar with face recognition demo.
+I hope you have already successfully run our [detection demo](#run_detection_demo) and you have already become close friend with SIMCAM camera. Next step is to be familiar with face recognition demo.
 1. Prepare face images of people in the folder with their names, those who you want to identify by using SIMCAM camera, at least one picture for one person. Here is an example:
 ![sample](./img/sample.png)
 2. Copy your folders into: `$SIMCAM_SDK/examples/face_recognition/extract_face_features/face_images`
@@ -204,6 +239,7 @@ cp -r BruceLee/ $SIMCAM_SDK/examples/face_recognition/extract_face_features/face
 ./main face_images/
 ```
 This command will extract face features of each person and save them into `faces.db` sqlite database.
+
 4. We consider, you have already copied files inside `$SIMCAM_SDK\src` folder into your sd card,and then copy another necessary files into your sd card:
 ```bash
 cp $SIMCAM_SDK/examples/face_recognition/extract_face_features/faces.db $sdcardpath # face features database
@@ -259,6 +295,7 @@ cp $SIMCAM_SDK/examples/models/lcnn/lcnn # face feature extractor model,
 }
 ```
 You can find model parameters information for each model in the model folder.
+
 6. Connect the camera through `telnet`  and execute `Demo`. You will get results similar to this:
 ```Shell
 /mnt/DCIM ./Demo
