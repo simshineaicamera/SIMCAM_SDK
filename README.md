@@ -111,6 +111,7 @@ optional arguments:
 If you can see above result, congratulations you have finished installation, it was really easy, right?!
 #### Install opencv
 Note* If you have already installed opencv>=3.4.3 versions you can skip this step.
+
 8. Enter `$SIMCAM_SDK/tools/` folder and run `install_opencv.sh` script :
 ```Shell
 cd $SIMCAM_SDK/tools/
