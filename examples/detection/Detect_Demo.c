@@ -10,7 +10,7 @@
 #include <signal.h>
 #include "../../libs/SIMCAM_lib.h"
 
-//A shared memory pointer that controls whether video is recorded,whether recognition box is displayed and whether play audio. 
+//A shared memory pointer that controls whether video is recorded,whether recognition box is displayed and whether play audio.
 //Users can not create other shared memory pointer.
 stMemory* viraddr;
 
@@ -30,8 +30,8 @@ int readConfig(CNN_Config_t* config, Server_Info* info){
     if(fd==NULL){
         printf("open /mnt/DCIM/config.txt err\n");
         return -1;
-    } 
-   
+    }
+
     //Get the content of config.txt
     char tmp[4096]={0};
     fread(tmp,1,4096,fd);
@@ -57,7 +57,7 @@ int readConfig(CNN_Config_t* config, Server_Info* info){
         config->cnn[i].label = cJSON_GetObjectItem(object,"label")->valueint;
         config->cnn[i].conf_thresh = cJSON_GetObjectItem(object,"conf_thresh")->valuedouble;
     }
-    
+
     info->if_send=cJSON_GetObjectItem(json, "if_send")->valueint;
     info->server_ip=cJSON_GetObjectItem(json,"server_IP")->valuestring;
     info->port=cJSON_GetObjectItem(json,"port")->valueint;
@@ -66,16 +66,16 @@ int readConfig(CNN_Config_t* config, Server_Info* info){
 }
 void socket_send(int classid,RectEx_t rectt){
     char* server_ip =server_info.server_ip;
-    int socketfd;    
-    struct sockaddr_in sockaddr;    
-    socketfd = socket(AF_INET, SOCK_STREAM, 0);    
-    memset(&sockaddr, 0, sizeof(sockaddr));    
-    sockaddr.sin_family = AF_INET;    
-    sockaddr.sin_port = htons(server_info.port);   
-    inet_pton(AF_INET, server_ip, &sockaddr.sin_addr);    
-    if ((connect(socketfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr))) <0){            
+    int socketfd;
+    struct sockaddr_in sockaddr;
+    socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&sockaddr, 0, sizeof(sockaddr));
+    sockaddr.sin_family = AF_INET;
+    sockaddr.sin_port = htons(server_info.port);
+    inet_pton(AF_INET, server_ip, &sockaddr.sin_addr);
+    if ((connect(socketfd, (struct sockaddr*)&sockaddr, sizeof(sockaddr))) <0){
         printf("server connect error\n");
-        return;        
+        return;
     }
    // printf(" connect succeed \n");
    struct timeb timer_msec;
@@ -87,10 +87,10 @@ void socket_send(int classid,RectEx_t rectt){
     {
         timestamp_msec=-1;
     }
-   
+
     char miio_send[1024];
     memset(miio_send, 0, sizeof(miio_send));
-    // 
+    //
     sprintf(miio_send,"GET http://%s:%d/simcam/event?modeltype=%d&pointA_X=%f&pointA_Y=%f&pointB_X=%f&pointB_Y=%f&timestamp=%lld\r\n\r\nCache-Control: no-cache",
     server_info.server_ip, server_info.port, classid,rectt.rect.x1,rectt.rect.y1,rectt.rect.x2,rectt.rect.y2,timestamp_msec);
     // sprintf(miio_send,"GET /simcam/event?modeltype=1&pointA_X=1&pointA_Y=2&pointB_X=3&pointB_Y=4&timestamp=1234567890111 HTTP/1.1\r\n\
@@ -109,7 +109,7 @@ void cmdHandler(){
     cmd_t _ptr;
     memset(&_ptr, 0, sizeof(cmd_t));
     memcpy(&_ptr, &gCmd, sizeof(cmd_t));
-   
+
     //the first value of data[1024] is the number of recognition boxes
     int num_box =  _ptr.data[0];
 
@@ -118,14 +118,14 @@ void cmdHandler(){
     if(num_box<0 || num_box>4) return;
 
     for(int i = 0; i < num_box; i++){
-        // create a structure to store the value of coordinates 
-        
+        // create a structure to store the value of coordinates
+
             //
             Rect.rect.x1 = _ptr.data[(i + 1) * 7 + 3];
             Rect.rect.y1 = _ptr.data[(i + 1) * 7 + 4];
             Rect.rect.x2 = _ptr.data[(i + 1) * 7 + 5];
             Rect.rect.y2 = _ptr.data[(i + 1) * 7 + 6];
-            
+
             //the value of each coordinate is in range of 0~1, if thet are not in this range ,there may be a mistake.
             if ((Rect.rect.x1 < 0) || (Rect.rect.x1 > 1))   return;
             if ((Rect.rect.y1 < 0) || (Rect.rect.y1 > 1))   return;
@@ -151,7 +151,7 @@ void cmdHandler(){
         float con_thresh = gCNNparam.cnn[0].conf_thresh;
         //if the probility is too small,there may be a mistake.
         if(probility<con_thresh) return;
-        
+
         //get the class ID of detected object,the corresponding category of ID can be viewed in labelmap.prototxt
         classID = _ptr.data[(i + 1) * 7 + 1];
 
@@ -162,7 +162,7 @@ void cmdHandler(){
         // if(12 == classID){
         //     sprintf(localdata.path_audio,"dog");     //play a audio to remind you it's a dog. "dog.pcm" should be in folder /mnt/DCIM/voice.
         // }
-   
+
         //copy all the value of localdata to the shared memory.
         memcpy(viraddr,&localdata,sizeof(stMemory));
   //  }
@@ -188,10 +188,10 @@ void cmdHandler(){
     if(server_info.if_send){
       socket_send(classID, Rect);
     }
-   
+
 }
 
-//create a thread to read data from SPI 
+//create a thread to read data from SPI
 void* threadSpi(void *arg){
 	int Cnt = 0;
     while (1) {
@@ -223,19 +223,7 @@ void rebootAlg(CNN_Config_t* param, Server_Info* info){
         openSpi();
 //call the function of readConfig to read parameters from config.txt.
         readConfig(param, info);
-        
-   
-    struct timeb timer_msec;
-    long long int timestamp_msec;
-    if(!ftime(&timer_msec)){
-        timestamp_msec=((long long int)timer_msec.time)*1000ll + (long long int)timer_msec.millitm;
-    }
-    else
-    {
-        timestamp_msec=-1;
-    }
-    
-    printf("if_send:%d, ip:%s, port:%d, time:%lld \n", server_info.if_send,server_info.server_ip, server_info.port, timestamp_msec);
+
 //after read the parameters,send them to Movidius through SPI.
         sendCfg((uint8_t*)param,sizeof(CNN_Config_t));
 //send the model file to Movidius through SPI.
@@ -246,23 +234,26 @@ void rebootAlg(CNN_Config_t* param, Server_Info* info){
          if(gCNNparam.cnn[2].model_have){
             sendBlob("emotion"); // emotion classification model
         }
-        
+
 }
 void set_time(){
-    system("ntpd -p us.ntp.org.cn -qNn");
-   // return 0;
+    if(server_info.if_send){
+      system("ntpd -p us.ntp.org.cn -qNn");
+    }
+
 }
 int main(int argc, char *argv[])
 {
 //init the whole system,including SPI and serial port.
+
     initSystem();
     set_time();
 //reset Movidius.
     reset2450();
 
     rebootAlg(&gCNNparam, &server_info);
-   
+
     startSpiServer();
-    
+
     while(1);
 }

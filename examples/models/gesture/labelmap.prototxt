@@ -13,8 +13,3 @@ item {
   label: 2
   display_name: "five"
 }
-item {
-  name: "neg"
-  label: 3
-  display_name: "neg"
-}

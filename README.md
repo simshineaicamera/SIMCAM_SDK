@@ -244,8 +244,8 @@ This command will extract face features of each person and save them into `faces
 4. We consider, you have already copied files inside `$SIMCAM_SDK\src` folder into your sd card,and then copy another necessary files into your sd card:
 ```bash
 cp $SIMCAM_SDK/examples/face_recognition/extract_face_features/faces.db $sdcardpath # face features database
-cp $SIMCAM_SDK/examples/face_recognition/Demo # demo executable for face recognition
-cp $SIMCAM_SDK/examples/models/lcnn/lcnn # face feature extractor model,
+cp $SIMCAM_SDK/examples/face_recognition/Demo $sdcardpath  # demo executable for face recognition
+cp $SIMCAM_SDK/examples/models/lcnn/lcnn $sdcardpath # face feature extractor model,
 ```
 5. Open `config.txt` file and do following changes (marked as changing line):
 ```bash
