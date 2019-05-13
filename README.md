@@ -355,8 +355,6 @@ python create_txt.py
 6. This python script will create `train.txt`, `test.txt`, `trainval.txt` and `val.txt` files in the `$SIMCAM_SDK/train/data/Images_xmls/ImageSets/Main` folder
 7. Go in `$SIMCAM_SDK/train/data/lmdb_files` folder and create your own `labelmap.prototxt` file, example has exist in the folder; you can change it according to your dataset.
 
-![sample](./img/sample2.jpg)
-
 8. In the terminal run create_list.sh script :
 ```Shell
 ./create_list.sh
@@ -377,6 +375,7 @@ So now, you nearly got everything ready to train the Network with the data prepa
 ./gen_model.sh  <num>
 ```
 “num” is number of classes in your dataset including the background class.  It will create prototxts folder and .prototxt files inside the folder for training, testing and deploying the model.
+
 2. If you do not have at least Get Force GTX 1060 or higher version of GPU hardware on your Ubuntu machine, you can skip this step. Because while you are installing SIMCAM SDK and Toolchain it installs caffe-ssd CPU version on your machine automatically, in /opt/movidius/ssd-caffe path. Let’s install GPU version of caffe-ssd to speed up your training process.  
 To make process simpler, SIMCAM team has provided docker image in docker hub, and Dockerfile for installation GPU version of caffe-ssd. All you should to do is having docker and nvidia-docker on your Ubuntu system. [Here](https://docs.docker.com/install/) is some information about docker and installation process of [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) and [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Let’s see simple steps to pull and run  `simcam/caffe-ssd:gpu` docker image into your machine:
 ```Shell
@@ -387,12 +386,14 @@ and inside the container locate `$SIMCAM_SDK/train/` folder
 cd $SIMCAM_SDK/train/
 ```
 ![sample](./img/sample3.jpg)
+
 3. To start training run `train.sh` script:
 ```Shell
 ./train.sh
 ```
 ![sample](./img/sample4.jpg)
-That is all your object detection model is started training.You can get a snapshot in 1000 steps. Total training lasts 120000 steps.
+
+That is all, your object detection model is started training.You can get a snapshot in 1000 steps. Total training lasts 120000 iterations.
 After all, you will get simcam_iter_xxxxx.caffemodel inside snapshot folder.  And deploy.prototxt file inside prototxts folder.
 
 #### Convert to the graph
@@ -419,18 +420,28 @@ Here is the guide for video surveillance monitoring system with iSpy and SimCam.
 1. Download and install the Open Source Camera Security Software “iSpy”. You can download it from [here](http://www.ispyconnect.com/download.aspx).
 
 2. If iSpy has been installed successfully ,Open iSpy, and Click “Add” menu to add SimCam camera for video surveillance.
+
 ![sample](./img/sample5.jpg)
 3. Open Video Source window by clicking  "IP Camera" icon.
+
 ![sample](./img/sample6.jpg)
 4. Choose FFMPEG（H264）menu and enter SimCam camera IP address, here is an example
    rtsp://192.168.168.171(this is Simcam IP address)
+
 5. Click Test button to check if the camera is connected.
+
 ![sample](./img/sample7.jpg)
+
 if the camera is connected we can see message box with confirmation "Connected".
+
 ![sample](./img/sample9.jpg)
+
 6. When you click "OK" buttons, you will be directed to the "Edit Camera" window. For simplicity, let's left all with default configuration. You just need to click "Finish" button.
+
 ![sample](./img/sample12.jpg)
+
 Now you can monitor your connected camera.
+
 ![sample](./img/sample11.jpg)
 
 Using SIMCAM camera and its SDK  you can develop your own amazing AI applications. SIMCAM team glad to see you on this repo and wish you good luck on your AI journey!!!   
