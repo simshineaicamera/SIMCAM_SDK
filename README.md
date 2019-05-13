@@ -27,6 +27,8 @@ However, here is some guide for really really quick starters :running: Let's get
 * [Installation](#installation)
 * [Run_detection_demo](#run_detection_demo)
 * [Face_recognition_demo](#face_recognition_demo)
+* [Train_Caffe_model](#train_caffe_model)
+* [Video_Surveillance_with_SimCam](#Video_Surveillance_with_SimCam)
 
 ### Installation
 
@@ -314,9 +316,89 @@ Recognized as : BruceLee
 ......
 ```
 
-Developers can train their own object detection models using Caffe deep learning framework and  neural network architecture provided by SimCam team.
+### Train_Caffe_model
 
+Developers can train their own object detection models using Caffe deep learning framework and  neural network architecture provided by SimCam team.
 Instruction can be found in [this document](./docs/How_To_Train_Model.pdf).
+Training your own custom object detection model is very easy using SIMCAM SDK,if you have already finished installation process, and all you need is video files contain desired object. Here is a simple guide how to do it.
+#### Preparing data for training:
+1. Open SIMCAM SDK folder and copy  all your video files into `$SIMCAM_SDK/train/data/Images_xmls/videos` folder
+2. Open terminal in `$SIMCAM_SDK/train/data/Images_xmls` folder and run `video2img.py` python script:
+```Shell
+cd $SIMCAM_SDK/train/data/Images_xmls/
+python3 video2img.py
+```
+It will save one frame as an image per second in JPEGImages folder by default. However, there are options; you can change input folder, output folder and number of frames to save.
+```Shell
+python3 video2img.py -h
+usage: video2img.py [-h] [--input INPUT] [--output OUTPUT]
+                    [--num NUMFRAMEPERSECOND]
+optional arguments:
+  -h, --help            show this help message and exit
+  --input INPUT, -i INPUT
+                        video input path
+  --output OUTPUT, -o OUTPUT
+                        output path
+  --num NUMFRAMEPERSECOND, -n NUMFRAMEPERSECOND
+                        num frame to get per second
+```
+3. Image annotation. You should annotate extracted images manually. We have provided an open source annotation tool named labelImg. That tool provides the object coordinate in xml format as output for further processing.  Simple annotations steps are shown below:
+  * Execute  labelImg file,  open  image  dataset  folder (in our case JPEGImages folder) by  clicking the OpenDir icon on the left pane.
+  * Image will appear. Click “Change Save Dir” icon and choose Annotations folder as a save folder. Draw rectangle boxes around the objects by clicking the Create RectBox icon and give a label. These boxes are called bounding boxes.
+  * Repeat second step for the each image that appears. Below image shows an example of an annotated image.
+![sample](./img/sample1.jpg)
+4. If you finished all above steps completely, you get bunch of xml files (annotations) inside Annotation folder and images JPEGImages folder.
+5. Open terminal inside the `$SIMCAM_SDK/train/data/Images_xmls` folder and run `create_txt.py`  python script:
+```Shell
+python create_txt.py
+```
+6. This python script will create `train.txt`, `test.txt`, `trainval.txt` and `val.txt` files in the `$SIMCAM_SDK/train/data/Images_xmls/ImageSets/Main` folder
+7. Go in `$SIMCAM_SDK/train/data/lmdb_files` folder and create your own `labelmap.prototxt` file, example has exist in the folder; you can change it according to your dataset.
+![sample](./img/sample2.jpg)
+8. In the terminal run create_list.sh script :
+```Shell
+./create_list.sh
+```
+It will generate `trainval.txt`, `test.txt`, `test_name_size.txt` files in the folder
+9. Last step is generating lmdb files, lmdb is caffe’s data format for training.
+In the terminal run `create_data.sh` script:
+```Shell
+./create_data.sh
+```
+It will create trainval_lmdb and test_lmdb files in the lmdb folder.
+
+#### Train model:
+So now, you nearly got everything ready to train the Network with the data prepared by yourself. The last thing is, the Network!  SIMCAM team provide a robust Network and all necessary scripts for you to train and deploy your own model on the SIMCAM products.
+1. Run `gen_model.sh` script to generate Network:
+
+```Shell
+./gen_model.sh  <num>
+```
+“num” is number of classes in your dataset including the background class.  It will create prototxts folder and .prototxt files inside the folder for training, testing and deploying the model.
+2. If you do not have at least Get Force GTX 1060 or higher version of GPU hardware on your Ubuntu machine, you can skip this step. Because while you are installing SIMCAM SDK and Toolchain it installs caffe-ssd CPU version on your machine automatically, in /opt/movidius/ssd-caffe path. Let’s install GPU version of caffe-ssd to speed up your training process.  
+To make process simpler, SIMCAM team has provided docker image in docker hub, and Dockerfile for installation GPU version of caffe-ssd. All you should to do is having docker and nvidia-docker on your Ubuntu system. [Here](https://docs.docker.com/install/) is some information about docker and installation process of [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) and [nvidia-docker](https://github.com/NVIDIA/nvidia-docker). Let’s see simple steps to pull and run  `simcam/caffe-ssd:gpu` docker image into your machine:
+```Shell
+sudo docker run --runtime=nvidia -ti --name=simcam  -v /home/your_username:/home/your_username simcam/caffe-ssd:gpu bash
+```
+and inside the container locate `$SIMCAM_SDK/train/` folder
+```Shell
+cd $SIMCAM_SDK/train/
+```
+![sample](./img/sample3.jpg)
+3. To start training run `train.sh` script:
+```Shell
+./train.sh
+```
+![sample](./img/sample4.jpg)
+That is all your object detection model is started training.You can get a snapshot in 1000 steps. Total training lasts 120000 steps.
+After all, you will get simcam_iter_xxxxx.caffemodel inside snapshot folder.  And deploy.prototxt file inside prototxts folder.
+
+#### Convert to the graph
+In installation process, we have seen description of model conversion tool, so let's convert our trained model using that tool.
+```Shell
+mvNCCompile deploy.prototxt -w simcam_iter_xxxxx.caffemodel -o graph -s 6
+```
+
 However, SIMACAM team has provided several robust detection models, such as [baby climb](examples/models/babyclimb) detection model, [gesture](examples/models/gesture) detection model, [person car face](examples/models/person_car_face) detection model, [pet magic](examples/models/pet_magic) detection models.  Here is some interesting results of detection for some models:
 <br>
 Pet magic detection model:
@@ -327,6 +409,27 @@ Pet magic detection model:
 Baby climb detection model:
 
 ![baby climb](https://github.com/RamatovInomjon/mygifs/blob/master/babyclimb.gif "baby climb test")
+
+### Video_Surveillance_with_SimCam
+iSpy is the world's most popular open source video surveillance application.
+Here is the guide for video surveillance monitoring system with iSpy and SimCam.
+
+1. Download and install the Open Source Camera Security Software “iSpy”. You can download it from [here](http://www.ispyconnect.com/download.aspx).
+
+2. If iSpy has been installed successfully ,Open iSpy, and Click “Add” menu to add SimCam camera for video surveillance.
+![sample](./img/sample5.jpg)
+3. Open Video Source window by clicking  "IP Camera" icon.
+![sample](./img/sample6.jpg)
+4. Choose FFMPEG（H264）menu and enter SimCam camera IP address, here is an example
+   rtsp://192.168.168.171(this is Simcam IP address)
+5. Click Test button to check if the camera is connected.
+![sample](./img/sample7.jpg)
+if the camera is connected we can see message box with confirmation "Connected".
+![sample](./img/sample9.jpg)
+6. When you click "OK" buttons, you will be directed to the "Edit Camera" window. For simplicity, let's left all with default configuration. You just need to click "Finish" button.
+![sample](./img/sample12.jpg)
+Now you can monitor your connected camera.
+![sample](./img/sample11.jpg)
 
 Using SIMCAM camera and its SDK  you can develop your own amazing AI applications. SIMCAM team glad to see you on this repo and wish you good luck on your AI journey!!!   
 ### Support
