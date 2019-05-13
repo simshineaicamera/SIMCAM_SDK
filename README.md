@@ -354,6 +354,7 @@ python create_txt.py
 ```
 6. This python script will create `train.txt`, `test.txt`, `trainval.txt` and `val.txt` files in the `$SIMCAM_SDK/train/data/Images_xmls/ImageSets/Main` folder
 7. Go in `$SIMCAM_SDK/train/data/lmdb_files` folder and create your own `labelmap.prototxt` file, example has exist in the folder; you can change it according to your dataset.
+
 ![sample](./img/sample2.jpg)
 
 8. In the terminal run create_list.sh script :
