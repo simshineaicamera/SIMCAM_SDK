@@ -319,8 +319,7 @@ Recognized as : BruceLee
 ### Train_Caffe_model
 
 Developers can train their own object detection models using Caffe deep learning framework and  neural network architecture provided by SimCam team.
-Instruction can be found in [this document](./docs/How_To_Train_Model.pdf).
-Training your own custom object detection model is very easy using SIMCAM SDK,if you have already finished installation process, and all you need is video files contain desired object. Here is a simple guide how to do it.
+Training your own custom object detection model is very easy using SIMCAM SDK,if you have already finished installation process, and all you need is video files contain desired object. Here is a simple guide how to accomplish it.
 #### Preparing data for training:
 1. Open SIMCAM SDK folder and copy  all your video files into `$SIMCAM_SDK/train/data/Images_xmls/videos` folder
 2. Open terminal in `$SIMCAM_SDK/train/data/Images_xmls` folder and run `video2img.py` python script:
