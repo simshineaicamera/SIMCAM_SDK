@@ -24,14 +24,24 @@ There are some documents for developers inside [docs](./docs/) folder including 
    * [How to train object detection model](docs/How_To_Train_Model.pdf)
 
 However, here is some guide for really really quick starters :running: Let's get started:smile:
+* [Installation_with_docker](#installation_with_docker)
 * [Installation](#installation)
 * [Run_detection_demo](#run_detection_demo)
 * [Face_recognition_demo](#face_recognition_demo)
 * [Train_Caffe_model](#train_caffe_model)
 * [Video_Surveillance_with_SimCam](#Video_Surveillance_with_SimCam)
 
+### Installation_with_docker
+The easiest way to prepare working environment is using docker , we have created docker image in the docker hub, you can easily pull the docker image and start development part. Here you can find [how to install docker and use on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04). Below command help you to pull the docker simcam sdk docker image and run it:
+```Shell
+sudo docker run -ti --name=simcamsdk -v /home/username/:/home/username/ simcam/simcamsdk:v1.0 bash
+cd SIMCAM_SDK_v1.0.0
+ls
+README.md  docs  examples  img  libs  src  tools  train
+```
+Everything is ready to use! 
+However, if you want install it in your machine below has shown step by step installation process.
 ### Installation
-
 1. Get the SDK. We will call the directory that you cloned SIMCAM SDK into `$SIMCAM_SDK`
 ```Shell
 git clone https://github.com/simshineaicamera/SIMCAM_SDK.git
