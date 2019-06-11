@@ -1,6 +1,6 @@
 {
-"wifi_mode":"STA_MODE",
-"if_send":1,
+"wifi_mode":"AP_MODE",
+"if_send":0,
 "server_IP":"118.190.201.26",
 "port":8001,
 "model":[{
