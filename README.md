@@ -39,7 +39,7 @@ cd SIMCAM_SDK_v1.0.0
 ls
 README.md  docs  examples  img  libs  src  tools  train
 ```
-Everything is ready to use! 
+Everything is ready to use!
 However, if you want install it in your machine below has shown step by step installation process.
 ### Installation
 1. Get the SDK. We will call the directory that you cloned SIMCAM SDK into `$SIMCAM_SDK`
@@ -410,7 +410,23 @@ In installation process, we have seen description of model conversion tool, so l
 ```Shell
 mvNCCompile deploy.prototxt -w simcam_iter_xxxxx.caffemodel -o graph -s 6
 ```
-
+#### Deep learning model training guide.
+1. Recommended deep learning frameworks.
+  <br>a) Caffe, highly recommended. Simcam team has provided robust model architecture based on caffe, and simple guide how to train model with caffe  framework.
+<br>b) Keras, If you want to train model with keras , you need to use Microsoft conversion tool MMdnn to convert your pre-trained model into caffe model.
+Here is the link: https://github.com/Microsoft/MMDnn
+<br> c) Tensorflow.
+2. Detection model:
+<br> Highly recommended one-shot based detection frameworks, such as Moblinet-SSD, and YOLO
+3. Some limitations:
+<br> a) Model size must be less than 20M-30M.
+<br> b) Each layer ‘name’ must be same with ‘top’
+<br> c) The depth-wise convolution layer supports only 3x3 filter size, and slice layer doesn’t support direct connection.
+4. Model optimization tips:
+<br> a) After model is trained, some layers can be merged to speed up the feed-forward process. For example, merge bn-sclae parameter to the conv layer.
+<br> b) Do not use the fc layer of many channel output, which will bring a large amount of parameters, in result slow data movement.
+<br> c) Use 1x1 and 3x3 convolutions , including deep convolutions, it is highly optimized on the movidius chip.
+<br>
 However, SIMACAM team has provided several robust detection models, such as [baby climb](examples/models/babyclimb) detection model, [gesture](examples/models/gesture) detection model, [person car face](examples/models/person_car_face) detection model, [pet magic](examples/models/pet_magic) detection models.  Here is some interesting results of detection for some models:
 <br>
 Pet magic detection model:
